@@ -1,0 +1,66 @@
+.card-delete {
+}
+
+.card-delete-form {
+  display: flex;
+  flex-wrap: wrap;
+  width: 358px;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.card-delete__container {
+  display: flex;
+  align-content: center;
+  background: #fff;
+  border-radius: 10px;
+  height: 181px;
+  left: 50%;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  width: 430px;
+  z-index: 10;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card-delete__close-button {
+  color: #fff;
+  cursor: pointer;
+  height: 40px;
+  left: 99%;
+  position: fixed;
+  bottom: 180px;
+  width: 40px;
+}
+
+.card-delete-title {
+  color: black;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  padding-bottom: 18px;
+}
+
+.card-delete-button {
+  background-color: #000;
+  border: none;
+  width: 358px;
+  color: #fff;
+  font-size: 18px;
+  height: 50px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.popup__opened {
+  visibility: visible;
+}
+
+.card-delete-button:hover {
+  opacity: 0.8;
+  border-radius: 2px;
+}

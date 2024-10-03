@@ -1,0 +1,227 @@
+.templates {
+  column-gap: 17px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  max-width: 880px;
+  row-gap: 20px;
+  padding-top: 32px;
+}
+
+.templates__card {
+  width: calc((100% - 40px) / 3);
+  height: 361px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px 10px 10px 10px;
+  color: black;
+  font-weight: 900;
+  line-height: 22px;
+  text-align: center;
+  position: relative;
+}
+.templates-card__image {
+  width: 100%;
+  height: 282px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.templates__card_remove-button {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.templates__card__description-container {
+  display: grid;
+  grid-template-areas:
+    "description like-button"
+    ". like-count";
+  grid-template-columns: 83% 7%;
+  grid-template-rows: 129% 0%;
+  grid-column-gap: 10px;
+  align-items: end;
+  justify-items: center;
+  justify-content: start;
+}
+
+.templates__card__description {
+  grid-area: description;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-self: baseline;
+  padding-left: 10%;
+  padding-top: 0%;
+  align-self: end;
+}
+
+.templates__card-button {
+  grid-area: like-button;
+  background-image: url("../images/Vector.jpg");
+  background-color: white;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 21px;
+  height: 19px;
+  border: none;
+  align-self: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.templates__card-likes-count {
+  grid-area: like-count;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+  align-self: center;
+}
+
+.templates__card_remove-button_visible {
+  visibility: visible;
+}
+.templates__card_remove-button_hidden {
+  visibility: hidden;
+}
+.templates__card_remove-button:hover {
+  transform: scale(1.1);
+  opacity: 0.5;
+}
+
+.templates__card-button:hover {
+  transform: scale(1.1);
+  opacity: 0.5;
+}
+
+.templates__card-button-active {
+  opacity: 1;
+  background: url(https://practicum-content.s3.us-west-1.amazonaws.com/web-code/dom/moved_heart-filled.svg)
+    center no-repeat;
+}
+
+.templates-popup__close-button {
+  position: fixed;
+  bottom: 84%;
+  left: 65%;
+  color: white;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+.templates-card__close-image {
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+}
+.templates-card__close-image:hover {
+  opacity: 0.3;
+}
+
+@media screen and (min-width: 320px) and (max-width: 880px) {
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 880px;
+    margin: auto;
+    row-gap: 20px;
+    column-gap: 17px;
+  }
+
+  .templates {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 880px;
+    margin: auto;
+    row-gap: 20px;
+    column-gap: 17px;
+    justify-content: space-around;
+  }
+
+  .templates__card {
+    width: 282px;
+    border: 1px solid rgba(0, 0, 0, 1);
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 10px 10px 10px 10px;
+    color: black;
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 29px;
+    text-align: center;
+  }
+
+  .view-image__container-image {
+    position: fixed;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    justify-content: space-around;
+    width: 240px;
+    height: 299px;
+    border-radius: 10px;
+    background: white;
+    z-index: 10;
+    align-items: center;
+  }
+
+  .view-image__fade {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9;
+  }
+
+  .view-image__image {
+    position: absolute;
+    width: 240px;
+    height: 299px;
+  }
+
+  .view-image-title {
+    position: absolute;
+    top: 310px;
+    left: 10px;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+
+    color: #ffffff;
+  }
+
+  .view-image__close-button {
+    position: absolute;
+    bottom: 100%;
+    left: 101%;
+    color: white;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .templates__card__description-container {
+    display: grid;
+    grid-template-areas:
+      "description like-button"
+      ". like-count";
+    grid-template-columns: 81% 9%;
+    grid-template-rows: 116% 0%;
+
+    grid-column-gap: 10px;
+    /* justify-items: center; */
+    align-content: center;
+  }
+}
