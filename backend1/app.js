@@ -63,7 +63,12 @@ app.use("/cards", celebrate({
 app.use(errorLog);
 app.use(errors());
 app.use((err, req, res, next) => {
-  console.log(err )
+  if (!err.status){
+    res.status(500).send({message:err.message})
+    return
+  }
+
+
  res.status(err.status).send({message:err.message})
 });
 

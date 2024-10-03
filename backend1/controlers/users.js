@@ -121,13 +121,13 @@ module.exports.login = (req, res, next) => {
   const {email, password} = req.body;
   User.findUserByCredentials({email, password})
   .then((user) => {
-    if (!user){
-      const error = new Error("User or password not found")
-        error.status = 404
-        next(error)
-    }
+
     const token = jwt.sign({_id: user._id}, NODE_ENV === 'production'? JWT_SECRET:DEV_SECRET, { expiresIn: '7d' } )
     res.status(200).send({token})
   })
-  .catch((next))
-}
+  .catch((err) => {
+          res
+            .status(401)
+            .send({ message: err.message });
+        });
+    };
