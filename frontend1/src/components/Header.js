@@ -1,11 +1,12 @@
 import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { Link, useLocation,useNavigate  } from "react-router-dom";
 import "../blocks/Header.css";
 import aroundImage from "../images/header_title.jpg";
 
 function Header({handleLogOut, formData}) {
   const location = useLocation();
-
+  const {currentUser} = React.useContext(CurrentUserContext)
   const navigate = useNavigate ()
 
   function signOut(){
@@ -25,7 +26,7 @@ function Header({handleLogOut, formData}) {
           <Link to="/signup"> Entrar
           </Link>
           ) 
-      case "/main":
+      case "/cards":
         return  (
           <span onClick={signOut}>
             Sair

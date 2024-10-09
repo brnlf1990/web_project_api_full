@@ -54,7 +54,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   const payload = jwt.verify(token, JWT_SECRET || DEV_SECRET);
   req.user = payload;
 
-  User.findById(payload._id)
+  User.findById(payload._id).select('-password')
     .then((currentUser) => {
 
       if (!currentUser) {
@@ -62,8 +62,9 @@ module.exports.getCurrentUser = (req, res, next) => {
         error.status = 404
         next(error)
       }
+
       res.status(200).send({ user: currentUser });
-      r
+
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -77,13 +78,14 @@ module.exports.getCurrentUser = (req, res, next) => {
 };
 
 module.exports.addUsers = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {  email, password } = req.body;
 
   const hashedPassowrd = hash.createHash(password)
 
-  User.create({ name, about, avatar, email, password:hashedPassowrd })
+  User.create({  email, password:hashedPassowrd })
     .then((user) => {
       if (!user){
+
         const error = new Error("Validation error")
         error.status = 400
         next(error)
@@ -98,23 +100,53 @@ module.exports.addUsers = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, about, avatar } = req.body;
+  const userId = req.params._id;
 
   User.findByIdAndUpdate(
-    req.params._id,
+    userId,
     { name, about, avatar },
     { new: true, runValidators: true }
-  )
-    .then((user) =>{
-      if (data === null || user instanceof mongoose.Error.ValidationError ||
-        mongoose.Error.DocumentNotFoundError) {
-        const error = new Error("User id not found")
-        error.status = 404
-        next(error)
+  ).select("-password")
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User ID not found");
+        error.status = 404;
+        return next(error);
       }
-       res.send({ data: user }
+      return res.send({ user });
+    })
+    .catch((error) => {
+      if (error instanceof mongoose.Error.ValidationError) {
+        error.status = 400;
+      }
+      return next(error);
+    });
+};
 
-       )})
-    .catch((next));
+module.exports.updateAvatar = (req, res, next) => {
+  const { avatar } = req.body;
+  const userId = req.params._id;
+
+  User.findByIdAndUpdate(
+    userId,
+    { avatar },
+    { new: true, runValidators: true }
+  ).select("-password")
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User ID not found");
+        error.status = 404;
+        return next(error);
+      }
+
+      return res.send({ user });
+    })
+    .catch((error) => {
+      if (error instanceof mongoose.Error.ValidationError) {
+        error.status = 400;
+      }
+      return next(error);
+    });
 };
 
 module.exports.login = (req, res, next) => {
@@ -126,7 +158,7 @@ module.exports.login = (req, res, next) => {
     res.status(200).send({token})
   })
   .catch((err) => {
-          res
+         return res
             .status(401)
             .send({ message: err.message });
         });

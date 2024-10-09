@@ -17,24 +17,28 @@ function Login({handleLoggedIn}) {
 
 
   const handleSubmit = (e) => {
+    
     e.preventDefault();
-    if (formData.email === '' || formData.password ==='' ||  formData.status === 400){
+    if (formData.email === '' || formData.password === '' ){
+
       console.log('Email ou senha invalido, por favor verifique os campos.')
-      return
+      return  
     }
     
     auth
-      .autorization((formData.email, formData.password).then((data) => {
+      .autorization(formData).then((data) => {
        
-        if (data.token){
+        if (data){    
           handleLoggedIn()
-          localStorage.setItem("token", data.token)
-          navigate('/main')
+          localStorage.setItem("token", data.token)          
+          navigate('/cards')
         }
       })
-      .catch((err) =>
-        console.log(`${err}`)
-      )) 
+      .catch((err) =>{
+
+        console.log(err)}
+      )
+      
   };
 
   return (
@@ -42,8 +46,8 @@ function Login({handleLoggedIn}) {
       <div className="login__container">
         <h2 className="login__title">Entrar</h2>
         <form onSubmit={handleSubmit} className="login__form">
-          <input placeholder="E-mail" onChange={handleChange} className="login__email" />
-          <input type="password" placeholder="Senha" onChange={handleChange} className="login__passowrd" />
+          <input name="email" placeholder="E-mail" onChange={handleChange} className="login__email" />
+          <input name="password" type="password" placeholder="Senha" onChange={handleChange} className="login__passowrd" />
 
           <button className="login__button" type="submit">Entrar</button>
           <p className="login__register">

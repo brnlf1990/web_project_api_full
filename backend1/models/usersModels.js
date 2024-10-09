@@ -6,13 +6,11 @@ const validator = require('validator');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
     minlength: 2,
     maxlength: 30,
   },
   about: {
     type: String,
-    required: true,
     minlength: 2,
     maxlength: 30,
   },
@@ -20,13 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: function (link) {
-        return /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)([\w._~:/?%#\[\]@!$&'()*+,;=]*[\w._~:/?%#\[\]@!$&'()*+,;=])?$/gi.test(
-          link
-        );
+        return /^(https?:\/\/[^\s$.?#].[^\s]*)$/.test(link);
       },
     },
     message: (props) => `${props.value}`,
-    required: true,
   },
   email:{
     type:String,
@@ -57,6 +52,7 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials({email
       if(!matched){
         return Promise.reject(new Error('Email or Password Does Not Match'));
       }
+
       return user
     })
   })

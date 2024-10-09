@@ -15,12 +15,14 @@ function Main({
   onCardLike,
   onCardDelete,
 }) {
-  const currentUser = React.useContext(CurrentUserContext);
-
+  const {currentUser, setCurrentUser} = React.useContext(CurrentUserContext)
+  
   if (!currentUser) {
+
     return <div>Loading...</div>;
   }
-
+  
+  
   return (
     <main className="content">
       <section className="profile">
@@ -61,13 +63,13 @@ function Main({
       </section>
       <section className="templates">
         {cards.length > 0 ? (
-          cards.map((card) => (
+          cards.map((card, index) => (
             <Card
-              key={card._id}
+            key={card._id || index}
               card={card}
-              onCardLike={() => onCardLike(card)}
-              onCardClick={() => onCardClick(card)}
-              onCardDelete={() => onCardDelete(card)}
+              onCardLike={onCardLike}
+              onCardClick={onCardClick}
+              onCardDelete={onCardDelete}
             />
           ))
         ) : (

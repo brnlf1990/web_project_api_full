@@ -4,8 +4,7 @@ import Main from "../components/Main";
 import api from "../utils/api";
 import ImagePopup from "./ImagePopup";
 import {
-  CurrentUserContext,
-  currentUser as fetchCurrentUser,
+  CurrentUserContext
 } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -19,22 +18,16 @@ function MainPage() {
   const [isDeletePopup, setDeletePopup] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({
-    name: "",
-    about: "",
-    avatar: "",
-  });
+  
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
-
+  const {currentUser, setCurrentUser} =useContext(CurrentUserContext)
   const { cards, setInitialCards } = useContext(CardContextRender);
-
   useEffect(() => {
-    fetchCurrentUser(setCurrentUser);
-
     api
       .getInitialCards()
       .then((initialCards) => {
+
         setInitialCards(initialCards);
       })
       .catch((err) => {
@@ -42,28 +35,38 @@ function MainPage() {
       });
   }, [setInitialCards]);
 
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  
 
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setInitialCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
+  const handleCardLike = React.useCallback((card) => {
+
+    const isLiked = card.likes.some((like) => like._id === currentUser._id);
+    if (isLiked) {
+
+      api.dislikeCard(card._id, currentUser._id).then((updatedCard) => {
+       return setInitialCards((prevCards) =>
+          prevCards.map((c) => (c._id === card._id ? updatedCard : c))
         );
-      })
-      .catch((err) => {
-        console.error(err);
       });
-  };
+    } else {
+      api.likeCard(card._id, currentUser._id).then((updatedCard) => {
+       return setInitialCards((prevCards) =>
+          prevCards.map((c) => (c._id === card._id ? updatedCard : c))
+        );
+      });
+    }
+  }, [currentUser._id]);
+
+  
 
   const handleCardDelete = (cardToDelete) => {
     api
       .deleteCard(cardToDelete.card._id)
       .then(() => {
+
         setInitialCards((prevCards) =>
           prevCards.filter((card) => card._id !== cardToDelete.card._id)
         );
+        
         setDeletePopup(false);
       })
       .catch((err) => {
@@ -84,6 +87,7 @@ function MainPage() {
   };
 
   const handleCardClick = (card) => {
+    
     setSelectedCard(card);
   };
 
@@ -105,7 +109,9 @@ function MainPage() {
     api
       .postNewCard({ name, link })
       .then((newCard) => {
+        
         setInitialCards([newCard, ...cards]);
+
         setIsAddPlacePopupOpen(false);
       })
       .catch((err) => {
@@ -114,12 +120,13 @@ function MainPage() {
   };
 
   const handleUpdateUser = ( { name, about }) => {
-console.log(fetchCurrentUser._id);
 
     api
-      .patchUserInfo({ name, about })
+      .patchUserInfo(currentUser._id,{ name, about })
       .then((updatedUser) => {
-        setCurrentUser(updatedUser);
+
+        setCurrentUser(updatedUser.user);
+
         setIsEditProfilePopupOpen(false);
       })
       .catch((error) => {
@@ -127,10 +134,11 @@ console.log(fetchCurrentUser._id);
       });
   };
 
-  const handleUpdateAvatar = ({ avatar }) => {
+  const handleUpdateAvatar = ( { avatar }) => {
     api
-      .userAvatar({ avatar })
+      .userAvatar(currentUser._id,{ avatar })
       .then((updateAvatar) => {
+        
         setCurrentUser(updateAvatar);
         setIsEditAvatarPopupOpen(false);
       })
@@ -140,7 +148,6 @@ console.log(fetchCurrentUser._id);
   };
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
           <Main
@@ -177,7 +184,6 @@ console.log(fetchCurrentUser._id);
           />
         </div>
       </div>
-    </CurrentUserContext.Provider>
   );
 }
 

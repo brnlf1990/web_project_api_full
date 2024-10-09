@@ -11,13 +11,13 @@ module.exports = ( req, res, next) => {
   }
 
   const token = authorization.replace('Bearer ', '');
-let payload
+  let payload
    try{
        payload = jwt.verify(token, JWT_SECRET || DEV_SECRET);
    }
    catch (err) {
 
-    const error = new Error('Incorrect email or passwordEmail or Password Does Not Match')
+    const error = new Error('Incorrect email or passwordEmail')
     error.status = 401
     next(error)
    }

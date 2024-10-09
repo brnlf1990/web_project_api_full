@@ -17,7 +17,7 @@ module.exports.getCards = (req, res, next) => {
       if (!card){
         const error = new Error("Cards not found")
         error.status = 404
-        next(error)
+        return next(error)
       }
 
       res.send({ data: card })})
@@ -25,20 +25,20 @@ module.exports.getCards = (req, res, next) => {
 };
 
 module.exports.addCard = (req, res, next) => {
-  const { name, link, owner } = req.body;
-
-  Cards.create({ name, link, owner})
+  const { name, link } = req.body;
+  const userId = req.user._id
+  Cards.create({ name, link, owner: userId})
     .then((card) => {
 
       res.status(HTTP_STATUS.CREATED).send({ data: card });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError && err.errors.owner) {
-        res.status(HTTP_STATUS.BAD_REQUEST).send({ message: `${err}` });
+        return res.status(HTTP_STATUS.BAD_REQUEST).send({ message: `${err}` });
       } else if (err instanceof mongoose.Error.ValidationError)
         [res.status(HTTP_STATUS.NOT_FOUND).send({ message: `${err}` })];
       else {
-        res
+      return  res
           .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
           .send({ message: `Error ${err}` });
       }
@@ -52,10 +52,14 @@ Cards.findById(req.params._id)
 .then((card) => {
 
   if (!card){
-    throw new Error("Card not found");
+    const error = new Error("Card not found");
+    error.status = 404;
+    return next(error);
   }
   if (currentUserId !== card.owner.toString() ){
-    throw new Error("Permission denied");
+    const error = new Error("Permission denied");
+        error.status = 403;
+        return next(error);
   }
   return Cards.findByIdAndDelete(req.params._id)
   .then((deletedCard) => {
@@ -79,41 +83,43 @@ module.exports.likeCard = (req, res, next) => {
     cardId,
     { $addToSet: { likes: userId } },
     { new: true }
-  )
+  ).populate('likes')
     .then((card) => {
+      console.log(card);
+
       res.send({ data: card });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        res
+        return res
           .status(HTTP_STATUS.BAD_REQUEST)
           .send({ message: "ID do cartão inválido" });
       } else if (err.statusCode === 404) {
-        res
+        return res
           .status(HTTP_STATUS.NOT_FOUND)
           .send({ message: `Erro no servidor: ${err.message}` });
       } else {
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send(`Error ${err}`);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send(`Error ${err}`);
       }
-    });
+    })
+
 };
 
 module.exports.dislike = (req, res, next) => {
   const cardId = req.params._id;
   const userId = req.body.userId;
 
-  Cards.findByIdAndDelete(cardId, { $pull: { likes: userId } }, { new: true })
-    .orFail()
+  Cards.findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
     .then((card) => {
       res.send({ data: card });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
-        res
+        return  res
           .status(HTTP_STATUS.BAD_REQUEST)
           .send({ message: "Card ID or User ID is missing" });
       }
 
-      res.status(500).send(`Error ${err}`);
+      return  res.status(500).send(`Error ${err}`);
     });
 };

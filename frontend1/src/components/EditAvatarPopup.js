@@ -5,17 +5,21 @@ import PopupWithForm from "./PopupWithForm";
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const currentUser = React.useContext(CurrentUserContext);
   const avatarRef = React.useRef(null);
-
+  const [avatar, setAvatar] = React.useState("");
   React.useEffect(() => {
-    if (currentUser && avatarRef.current) {
-      avatarRef.current.value = currentUser.avatar || ""; 
+    if (currentUser) {
+      setAvatar(currentUser.avatar || "");
     }
   }, [currentUser]);
+
+  const handleAvatarChange = (event) => {
+    setAvatar(event.target.value);
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
     onUpdateAvatar({
-      avatar: avatarRef.current.value,
+      avatar
     });
   }
 
@@ -33,7 +37,8 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
         placeholder="Link da imagem"
         className="popup__form-input photo-update-popup__form-input"
         id="popup__link-photo"
-        ref={avatarRef}
+        value={avatar}
+        onChange={handleAvatarChange}
         required
       />
       <span className="popup__link-photo-error"></span>

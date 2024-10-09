@@ -10,27 +10,29 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import * as auth from "../utils/auth";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(() =>{
-    handleCheckToken()
-  })
-  
-  const history = useNavigate ()
-function handleCheckToken(){
-  const jwt = localStorage.getItem("token")
 
   
-    auth.checkToken(jwt).then((jwtToken) => {
-      if (jwtToken){
-       handleLoggedIn()
-       history.push('/main')
-    }})
-    .catch((err) => {
-      if (err.message.includes('Failed to fetch' || err.message.includes('CORS'))){
+  const navigate = useNavigate()
+
+  useEffect(() =>{
+
+  const jwt = localStorage.getItem("token")
+  
+    if (jwt){
+
+      auth.checkToken(jwt).then((res) => {
+        if (res){
+          handleLoggedIn()
+          navigate('/cards')
       }
     })
-  
-}
-
+      .catch((err) => {
+        if (err.message.includes('Failed to fetch' || err.message.includes('CORS'))){
+          console.log(err)
+        }
+      })
+    }
+}, [])
   const handleLoggedIn = () => {
     setLoggedIn(true)
   }
@@ -43,11 +45,11 @@ function handleCheckToken(){
       <Header handleLogOut={handleLogOut} />
 
       <Routes>
-        <Route path="/signin" element={<Login />}></Route>
+        <Route path="/signin"   element={<Login handleLoggedIn={handleLoggedIn}/>}></Route>
         <Route path="/signup" element={<Register />}></Route>
-        <Route path="/"></Route>
+        <Route path="/" element={<Login />} ></Route>
         <Route
-          path="/main"
+          path="/cards"
           element={
             <ProtectedRoute loggedIn={loggedIn} >
               <MainPage />

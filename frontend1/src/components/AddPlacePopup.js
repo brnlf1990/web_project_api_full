@@ -34,7 +34,7 @@ function AddPlacePopup({ onClose, isOpen, onAddPlaceSubmit }) {
       <span className="popup__card-title-insert-error"></span>
       <input
         type="url"
-        name="image"
+        name="link"
         placeholder="Link da imagem"
         className="popup__form-input add-popup__form-input"
         id="popup__link-insert"

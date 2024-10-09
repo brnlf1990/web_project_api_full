@@ -4,14 +4,17 @@ import "./index.css";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import { CardRenderProvider } from "./contexts/CardContextRender";
+import { CurrentUserProvider } from "./contexts/CurrentUserContext";
 import { BrowserRouter } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter basename="/web_project_around_react">
+    <CurrentUserProvider>
       <CardRenderProvider>
         <App />
       </CardRenderProvider>
+      </CurrentUserProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

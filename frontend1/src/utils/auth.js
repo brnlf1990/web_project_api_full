@@ -18,11 +18,17 @@ export const register = ({ email, password }) => {
       if (res) {
         console.log(res);
       }
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+      
+    })
 };
 
 export const autorization = ({ email, password }) => {
+
     return fetch(`${BASE_URL}/signin`, {
+      
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -32,27 +38,27 @@ export const autorization = ({ email, password }) => {
     })
       .then((response) => {
         if (response.ok) {
+
+          
           return response.json();
         }
       })
-      .then((data) => {
-        if (data) {
-          localStorage.localStorage('token', data.token)
-        }
-      });
+      
   };
 
   export const checkToken = (token) => {
-    return fetch(`${BASE_URL}/signin`, {
+    
+    return fetch(`${BASE_URL}/cards`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : `Bearer ${localStorage.getItem(token)}`,
+        "Authorization" : `Bearer ${token}`,
       },
     })
       .then((response) => {
         if (response.ok) {
+          
           return response.json();
         }
       })
