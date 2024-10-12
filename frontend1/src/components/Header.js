@@ -25,13 +25,13 @@ function Header({handleLogOut, formData}) {
         return(
           <Link to="/signup"> Entrar
           </Link>
-          ) 
-      case "/cards":
+      
+    ) 
+    case "/cards":
         return  (
-          <span onClick={signOut}>
-            Sair
-          </span>
+          <span  >{currentUser.email}</span>
         );
+      
     }
   };
 
@@ -44,6 +44,8 @@ function Header({handleLogOut, formData}) {
           className="header__image"
         />
         <p className="header__enter-button">{getButtonText()}</p>
+        <span className="header__logout" onClick={signOut}>Sair</span>
+
       </div>
       <div className="header__line"></div>
     </header>

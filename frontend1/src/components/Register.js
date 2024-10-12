@@ -22,9 +22,12 @@ const navigate = useNavigate ()
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     auth
       .register(formData).then((response) =>{
         if (response){
+          
+          
           setIsModalOpen(true);
           setIsRegistred(true)
           navigate('/signin')

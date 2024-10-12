@@ -13,7 +13,11 @@ const auth = require('./middlware/auth')
 const Joi = require("joi");
 const cors = require("cors");
 mongoose.connect("mongodb://localhost:27017/aroundb");
-
+const allowedCors = [
+  'https://around-project.strangled.net',
+  'http://around-project.strangled.net',
+  'localhost:3000'
+];
 const {
   addUsers,
   login
@@ -21,11 +25,12 @@ const {
 const { PORT } = process.env;
 const app = express();
 app.use(cors({
-  origin:'http://localhost:3000',
+  origin:allowedCors,
   methods:['GET', 'PUT', 'PATCH','DELETE'],
   allowedHeaders:['Content-Type', 'Authorization']
 
 }));
+app.options('*', cors())
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));

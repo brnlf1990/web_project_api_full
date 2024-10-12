@@ -3,12 +3,12 @@
 }
 
 .header__container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 74% 16% 10%;
   width: 80%;
   margin-top: 45px;
+  align-items: center;
+
 }
 .header__image {
   width: 173px;
@@ -35,6 +35,18 @@
 }
 
 .header__enter-button{
+  cursor: pointer;
+}
+
+.header__logout{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: right;
+  color: white;
+}
+.header__logout{
   cursor: pointer;
 }
 
