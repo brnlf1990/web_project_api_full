@@ -4,8 +4,6 @@ const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
 const bodyParser = require("body-parser");
 const cardsRouter = require("./routes/cards");
-const { cardValidationSchema } = require('./models/cardsModels');
-const { userValidationSchema } = require('./models/usersModels');
 const { celebrate, errors } = require('celebrate');
 const {requestLogger, errorLog} = require('./middlware/logger')
 require('dotenv').config()
@@ -26,9 +24,9 @@ const { PORT } = process.env;
 const app = express();
 app.use(cors({
   origin:allowedCors,
-  methods:['GET', 'PUT', 'PATCH','DELETE'],
-  allowedHeaders:['Content-Type', 'Authorization']
-
+  methods:['GET','HEAD', 'POST', 'PUT', 'PATCH','DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  credentials: true,
 }));
 app.options('*', cors())
 app.use(bodyParser.json());
