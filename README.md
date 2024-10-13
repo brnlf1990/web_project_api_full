@@ -1,11 +1,6 @@
 # Tripleten web_project_api_full
-Para acessar o site entre no endereço https://www.around-project.strangled.net/cards.
+Acesse o site através do link: https://www.around-project.strangled.net/cards.
 
-Rede social com os melhores lugares dos Estados Unidos.
-Você pode colocar sua melhor foto e outras pessoas poderão curtir e olhar com zoom.
-Voce pode mudar sua foto do avar clicando em cima da foto, pode mudar seu nome e escrever algo sobre você.
-Para entrar no site, precisa primeiro se inscrever e usar seu login para começar a utilizar nosso aplicativo.
+Esta é uma rede social dedicada aos melhores lugares dos Estados Unidos. Você pode compartilhar sua melhor foto, colocar nome dela e outros usuários poderão curti-la e ampliar a imagem para vê-la em detalhes. Também é possível alterar sua foto de perfil clicando sobre ela, mudar seu nome e escrever uma breve biografia sobre você. Para utilizar o site, é necessário primeiro se cadastrar e fazer login para começar a explorar o aplicativo.
 
-Esse site foi feito com HTML, CSS, React, Express, Node.js e MongooDb.
-Para gerencimaneto e servir o conteudo foi utilizado NPM, Nginx, PM2.
-Para hospedar o site foi criado uma instancia no Google Cloud e foram abertas as portas para comunicação do site.
+O site foi desenvolvido utilizando HTML, CSS, React, Express, Node.js, JWT e MongoDB. O gerenciamento e o servidor de conteúdo foram configurados com NPM, Nginx e PM2. Para hospedar o site, foi criada uma instância no Google Cloud, com as portas necessárias para permitir a comunicação adequada.
