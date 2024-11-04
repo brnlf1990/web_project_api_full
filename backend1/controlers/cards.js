@@ -1,7 +1,6 @@
 
 const Cards = require("../models/cardsModels");
 const mongoose = require("mongoose");
-const {getCurrentUser} = require('./users')
 
 const HTTP_STATUS = {
   OK: 200,

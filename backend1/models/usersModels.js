@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const {validateHash} = require('../utils/hash')
-const Joi = require("joi");
-const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -58,4 +56,4 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials({email
   })
 }
 
-module.exports = mongoose.model("user", userSchema)
+module.exports = mongoose.model("user", userSchema);

@@ -5,16 +5,16 @@ const usersRouter = require("./routes/users");
 const bodyParser = require("body-parser");
 const cardsRouter = require("./routes/cards");
 const { celebrate, errors } = require('celebrate');
-const {requestLogger, errorLog} = require('./middlware/logger')
+const {requestLogger, errorLog} = require('./middleware/logger')
 require('dotenv').config()
-const auth = require('./middlware/auth')
+const auth = require('./middleware /auth')
 const Joi = require("joi");
 const cors = require("cors");
 mongoose.connect("mongodb://localhost:27017/aroundb");
 const allowedCors = [
   'https://around-project.strangled.net',
   'http://around-project.strangled.net',
-  'localhost:3000'
+  'http://localhost:3000'
 ];
 const {
   addUsers,

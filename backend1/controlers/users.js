@@ -1,8 +1,7 @@
-require('dotenv').config()
-const hash = require('../utils/hash')
-const jwt = require("jsonwebtoken")
-
-const {NODE_ENV, JWT_SECRET, DEV_SECRET} = process.env;
+require("dotenv").config();
+const hash = require("../utils/hash");
+const jwt = require("jsonwebtoken");
+const { NODE_ENV, JWT_SECRET, DEV_SECRET } = process.env;
 const User = require("../models/usersModels");
 const mongoose = require("mongoose");
 const HTTP_STATUS = {
@@ -11,16 +10,16 @@ const HTTP_STATUS = {
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((user) => {
-
-      if (!user){
-        const error = new Error("User not found")
-        error.status = 404
-        next(error)
+      if (!user) {
+        const error = new Error("User not found");
+        error.status = 404;
+        next(error);
       }
 
-      res.send({ data: user })})
+      res.send({ data: user });
+    })
     .catch((err) => {
-        next(err)
+      next(err);
     });
 };
 
@@ -29,10 +28,10 @@ module.exports.getUsersById = (req, res, next) => {
 
   User.findById(_id)
     .then((user) => {
-      if (!user){
-        const error = new Error("User not found")
-        error.status = 404
-        next(error)
+      if (!user) {
+        const error = new Error("User not found");
+        error.status = 404;
+        next(error);
       }
       res.send({ data: user });
     })
@@ -42,29 +41,26 @@ module.exports.getUsersById = (req, res, next) => {
           .status(HTTP_STATUS.NOT_FOUND)
           .send({ message: `User ID is missing` });
       }
-      next(err)
-
+      next(err);
     });
 };
 
-
 module.exports.getCurrentUser = (req, res, next) => {
   const { authorization } = req.headers;
-  const token = authorization.replace('Bearer ', '')
+  const token = authorization.replace("Bearer ", "");
   const payload = jwt.verify(token, JWT_SECRET || DEV_SECRET);
   req.user = payload;
 
-  User.findById(payload._id).select('-password')
+  User.findById(payload._id)
+    .select("-password")
     .then((currentUser) => {
-
       if (!currentUser) {
-        const error = new Error("User not found")
-        error.status = 404
-        next(error)
+        const error = new Error("User not found");
+        error.status = 404;
+        next(error);
       }
 
       res.status(200).send({ user: currentUser });
-
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -72,30 +68,27 @@ module.exports.getCurrentUser = (req, res, next) => {
           .status(HTTP_STATUS.NOT_FOUND)
           .send({ message: `User ID is missing` });
       }
-      next(err)
-
+      next(err);
     });
 };
 
 module.exports.addUsers = (req, res, next) => {
-  const {  email, password } = req.body;
+  const { email, password } = req.body;
 
-  const hashedPassowrd = hash.createHash(password)
+  const hashedPassowrd = hash.createHash(password);
 
-  User.create({  email, password:hashedPassowrd })
+  User.create({ email, password: hashedPassowrd })
     .then((user) => {
-      if (!user){
-
-        const error = new Error("Validation error")
-        error.status = 400
-        next(error)
-
+      if (!user) {
+        const error = new Error("Validation error");
+        error.status = 400;
+        next(error);
       }
-      const userObject = user.toObject()
-      delete userObject.password
+      const userObject = user.toObject();
+      delete userObject.password;
       res.status(201).send({ data: userObject });
     })
-    .catch((next));
+    .catch(next);
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -106,7 +99,8 @@ module.exports.updateUser = (req, res, next) => {
     userId,
     { name, about, avatar },
     { new: true, runValidators: true }
-  ).select("-password")
+  )
+    .select("-password")
     .then((user) => {
       if (!user) {
         const error = new Error("User ID not found");
@@ -127,11 +121,8 @@ module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const userId = req.params._id;
 
-  User.findByIdAndUpdate(
-    userId,
-    { avatar },
-    { new: true, runValidators: true }
-  ).select("-password")
+  User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
+    .select("-password")
     .then((user) => {
       if (!user) {
         const error = new Error("User ID not found");
@@ -150,16 +141,17 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.login = (req, res, next) => {
-  const {email, password} = req.body;
-  User.findUserByCredentials({email, password})
-  .then((user) => {
-
-    const token = jwt.sign({_id: user._id}, NODE_ENV === 'production'? JWT_SECRET:DEV_SECRET, { expiresIn: '7d' } )
-    res.status(200).send({token})
-  })
-  .catch((err) => {
-         return res
-            .status(401)
-            .send({ message: err.message });
-        });
-    };
+  const { email, password } = req.body;
+  User.findUserByCredentials({ email, password })
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === "production" ? JWT_SECRET : DEV_SECRET,
+        { expiresIn: "7d" }
+      );
+      res.status(200).send({ data: token });
+    })
+    .catch((err) => {
+      return res.status(401).send({ message: err.message });
+    });
+};
