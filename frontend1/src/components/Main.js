@@ -5,24 +5,36 @@ import profileEditButton from "../images/avatarPencil.png";
 import cardAddButton from "../images/add__button_icon.jpg";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-
+import { CardContextRender } from "../contexts/CardContextRender";
+import api from "../utils/api";
 function Main({
   onEditProfileClick,
   onAddPlaceClick,
   onEditAvatarClick,
   onCardClick,
-  cards,
   onCardLike,
   onCardDelete,
 }) {
-  const {currentUser, setCurrentUser} = React.useContext(CurrentUserContext)
-  
-  if (!currentUser) {
+  const { currentUser, setCurrentUser } = React.useContext(CurrentUserContext);
+  const { cards, setInitialCards } = React.useContext(CardContextRender);
+  React.useEffect(() => {
+    api
+      .getInitialCards()
+      .then((initialCards) => {
+        
+        setInitialCards(initialCards);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [setInitialCards]);
 
+  
+
+  if (!currentUser) {
     return <div>Loading...</div>;
   }
-  
-  
+
   return (
     <main className="content">
       <section className="profile">
@@ -62,10 +74,10 @@ function Main({
         </div>
       </section>
       <section className="templates">
-        {cards.length > 0 ? (
+        {Array.isArray(cards) && cards.length > 0 ? (
           cards.map((card, index) => (
             <Card
-            key={card._id || index}
+              key={card._id || index}
               card={card}
               onCardLike={onCardLike}
               onCardClick={onCardClick}

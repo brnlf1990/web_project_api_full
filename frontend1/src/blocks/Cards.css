@@ -40,7 +40,7 @@
     "description like-button"
     ". like-count";
   grid-template-columns: 83% 7%;
-  grid-template-rows: 194% 0%;
+  grid-template-rows: 132% 0%;
   grid-column-gap: 10px;
   align-items: end;
   justify-items: center;

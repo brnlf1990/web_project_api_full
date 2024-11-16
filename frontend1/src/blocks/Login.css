@@ -46,6 +46,7 @@
   height: 50px;
   width: 358px;
   border-radius: 1%;
+  cursor: pointer;
 }
 
 .login__register {

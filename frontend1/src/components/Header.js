@@ -1,40 +1,33 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Link, useLocation,useNavigate  } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../blocks/Header.css";
 import aroundImage from "../images/header_title.jpg";
 
-function Header({handleLogOut, formData}) {
+function Header({ handleLogOut }) {
   const location = useLocation();
-  const {currentUser} = React.useContext(CurrentUserContext)
-  const navigate = useNavigate ()
+  const { currentUser } = React.useContext(CurrentUserContext);
+  const navigate = useNavigate();
 
-  function signOut(){
+  function signOut() {
+
+    localStorage.removeItem("token");
     handleLogOut();
-    localStorage.removeItem('jwt')
-    navigate('/signin')
+
+    navigate("/signin");
   }
   const getButtonText = () => {
     switch (location.pathname) {
       case "/signup":
-        return (
-        <Link to="/signin"> Faça o Login
-        </Link>
-        )
+        return <Link to="/signin"> Faça o Login</Link>;
       case "/signin":
-        return(
-          <Link to="/signup"> Entrar
-          </Link>
-      
-    ) 
-    case "/cards":
-        return  (
-          <span  >{currentUser.email}</span>
-        );
-      
+        return <Link to="/signup"> Entrar</Link>;
+      case "/cards":
+        return <span>{currentUser.email}</span>;
     }
   };
-
+  const shouldShowLogout =
+    location.pathname !== "/signin" && location.pathname !== "/signup";
   return (
     <header className="header">
       <div className="header__container">
@@ -44,8 +37,11 @@ function Header({handleLogOut, formData}) {
           className="header__image"
         />
         <p className="header__enter-button">{getButtonText()}</p>
-        <span className="header__logout" onClick={signOut}>Sair</span>
-
+        {shouldShowLogout && (
+          <span className="header__logout" onClick={signOut}>
+            Sair
+          </span>
+        )}
       </div>
       <div className="header__line"></div>
     </header>

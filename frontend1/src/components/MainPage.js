@@ -18,22 +18,11 @@ function MainPage() {
   const [isDeletePopup, setDeletePopup] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
   const {currentUser, setCurrentUser} =useContext(CurrentUserContext)
   const { cards, setInitialCards } = useContext(CardContextRender);
-  useEffect(() => {
-    api
-      .getInitialCards()
-      .then((initialCards) => {
-
-        setInitialCards(initialCards);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [setInitialCards]);
+ 
 
   
 
@@ -77,6 +66,9 @@ function MainPage() {
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
+
+ 
+
 
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
@@ -146,7 +138,6 @@ function MainPage() {
         console.error(err);
       });
   };
-
   return (
       <div className="App">
         <div className="page">

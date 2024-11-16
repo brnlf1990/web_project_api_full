@@ -10,20 +10,21 @@ export const CardRenderProvider = ({ children }) => {
     api
       .getInitialCards()
       .then((data) => {
-          
+        if (!data){
+          return
+        }
+
         setInitialCards(data);
       })
       .catch((err) => {
-       console.log(err)
+        console.log(err);
       });
   }, [setInitialCards]);
-  
-  const memoHookCard = React.useMemo(
-    () => ({ cards, setInitialCards }),
-    [cards, setInitialCards]
-  );
+
+  console.log("card context", cards);
+
   return (
-    <CardContextRender.Provider value={memoHookCard}>
+    <CardContextRender.Provider value={{ cards, setInitialCards }}>
       {children}
     </CardContextRender.Provider>
   );

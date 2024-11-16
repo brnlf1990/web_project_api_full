@@ -4,7 +4,6 @@ import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const avatarRef = React.useRef(null);
   const [avatar, setAvatar] = React.useState("");
   React.useEffect(() => {
     if (currentUser) {

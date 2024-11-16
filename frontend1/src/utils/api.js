@@ -29,7 +29,9 @@ export class Api {
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {
-        return res.json().then((data) => data.data)
+        
+        return res.json().then((data) => data.data
+        )
       }
 
     });
@@ -126,7 +128,7 @@ export class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around-api.strangled.net",
+  baseUrl: "http://localhost:3001",
   headers: {
     "Authorization" : `Bearer ${localStorage.getItem('token')}`,
     "Content-Type": "application/json",
