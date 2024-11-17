@@ -15,7 +15,7 @@ function Main({
   onCardLike,
   onCardDelete,
 }) {
-  const { currentUser, setCurrentUser } = React.useContext(CurrentUserContext);
+  const { currentUser } = React.useContext(CurrentUserContext);
   const { cards, setInitialCards } = React.useContext(CardContextRender);
   React.useEffect(() => {
     api

@@ -21,7 +21,6 @@ export const CardRenderProvider = ({ children }) => {
       });
   }, [setInitialCards]);
 
-  console.log("card context", cards);
 
   return (
     <CardContextRender.Provider value={{ cards, setInitialCards }}>

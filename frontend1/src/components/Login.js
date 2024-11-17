@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../blocks/Login.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import * as auth from "../utils/auth";
-
+import InfoTooltip from "../components/InfoTooltip";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function Login({ handleLoggedIn }) {
   const [formData, setFormData] = React.useState({
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = React.useState("")
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isRegistred, setIsRegistred] = React.useState(false);
+  const location = useLocation();
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const {setCurrentUser} = useContext(CurrentUserContext)
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,8 +32,7 @@ function Login({ handleLoggedIn }) {
       .autorization(formData)
       .then((data) => {
         if (data) {
-          console.log(data.data);
-          
+          setCurrentUser(data)
           localStorage.setItem("token", data.data);
           navigate("/cards");
           handleLoggedIn();
@@ -40,6 +44,19 @@ function Login({ handleLoggedIn }) {
       });
   };
 
+  React.useEffect(() => {
+    if (location.state){
+      setIsModalOpen(true);
+      setIsRegistred(true);
+
+    }
+    return
+
+  },[location])
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="login">
       <div className="login__container">
@@ -67,6 +84,9 @@ function Login({ handleLoggedIn }) {
           </p>
         </form>
       </div>
+      {isModalOpen && (
+          <InfoTooltip isRegistred={isRegistred} onClose={handleCloseModal} />
+        )}
     </div>
   );
 }

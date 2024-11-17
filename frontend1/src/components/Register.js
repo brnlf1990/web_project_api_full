@@ -12,12 +12,7 @@
       password: "",
     });
     const navigate = useNavigate();
-    React.useEffect(() => {
-      console.log("isModalOpen changed:", isModalOpen);
-      if (isModalOpen) {
-        console.log("Modal is now open");
-      }
-    }, [isModalOpen]);  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
@@ -30,10 +25,10 @@
         .register(formData)
         .then((response) => {
           if (response.data) {
-            console.log(response, isModalOpen);      
-            setIsRegistred(true);
-            setIsModalOpen(true);
-            navigate("/signin");
+            
+            navigate("/signin",{
+              state:{ isRegistered: true },
+            });
           }else{
             console.log(response.ok)
           }

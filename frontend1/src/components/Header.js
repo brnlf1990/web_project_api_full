@@ -6,14 +6,13 @@ import aroundImage from "../images/header_title.jpg";
 
 function Header({ handleLogOut }) {
   const location = useLocation();
-  const { currentUser } = React.useContext(CurrentUserContext);
+  const { currentUser} = React.useContext(CurrentUserContext);
   const navigate = useNavigate();
 
   function signOut() {
 
     localStorage.removeItem("token");
     handleLogOut();
-
     navigate("/signin");
   }
   const getButtonText = () => {

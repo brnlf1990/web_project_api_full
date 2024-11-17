@@ -19,13 +19,11 @@ export const CurrentUserProvider = ({children}) => {
     });
   }, [])
  
-  const memoCurrentUser = React.useMemo(() =>
-     ({ currentUser, setCurrentUser }), 
-  [currentUser]);
+ 
   
   
   return(
-    <CurrentUserContext.Provider value={memoCurrentUser}>
+    <CurrentUserContext.Provider value={{currentUser, setCurrentUser}}>
       {children}
       </CurrentUserContext.Provider>
   )

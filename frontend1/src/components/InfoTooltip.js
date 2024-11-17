@@ -2,7 +2,6 @@ import React from "react";
 import closeButton from "../images/Close_Icon.png";
 import "../blocks/InfoTooltip.css";
 function InfoTooltip({ isRegistred, onClose }) {
-  console.log(isRegistred);
   
   return (
     <div className={"modal"}>
