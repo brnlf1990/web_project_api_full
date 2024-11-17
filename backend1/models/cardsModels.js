@@ -1,7 +1,5 @@
-
-const { required } = require("joi");
 const mongoose = require("mongoose");
-const validator = require("validator");
+
 const cardsSchema = new mongoose.Schema({
 
   name: {
@@ -14,7 +12,7 @@ const cardsSchema = new mongoose.Schema({
     type: String,
     validate: {
 
-      validator: function (link) {
+      validator(link) {
         return /^(https?:\/\/[^\s$.?#].[^\s]*)$/.test(link);
       },
       message: (props) => `${props.value} is not a valid link!`,
@@ -24,10 +22,10 @@ const cardsSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "_id",
-    required:true,
+    required: true,
   },
   likes: {
-    type:  [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   },
   createdAt: {
     type: Date,

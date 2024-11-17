@@ -1,12 +1,13 @@
 require("dotenv").config();
-const hash = require("../utils/hash");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+const hash = require("../utils/hash");
+const HTTP_STATUS = require('../utils/utils')
+
 const { NODE_ENV, JWT_SECRET, DEV_SECRET } = process.env;
 const User = require("../models/usersModels");
-const mongoose = require("mongoose");
-const HTTP_STATUS = {
-  NOT_FOUND: 404,
-};
+
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((user) => {
@@ -39,7 +40,7 @@ module.exports.getUsersById = (req, res, next) => {
       if (err instanceof mongoose.Error.CastError) {
         res
           .status(HTTP_STATUS.NOT_FOUND)
-          .send({ message: `User ID is missing` });
+          .send({ message: "User ID is missing" });
       }
       next(err);
     });
@@ -66,7 +67,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (err instanceof mongoose.Error.CastError) {
         res
           .status(HTTP_STATUS.NOT_FOUND)
-          .send({ message: `User ID is missing` });
+          .send({ message: "User ID is missing" });
       }
       next(err);
     });
@@ -88,7 +89,13 @@ module.exports.addUsers = (req, res, next) => {
       delete userObject.password;
       res.status(201).send({ data: userObject });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        res.status(400).send({ message: `Erro de validação: ${err.message}` });
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -98,7 +105,7 @@ module.exports.updateUser = (req, res, next) => {
   User.findByIdAndUpdate(
     userId,
     { name, about, avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .select("-password")
     .then((user) => {
@@ -111,7 +118,9 @@ module.exports.updateUser = (req, res, next) => {
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
-        error.status = 400;
+        const validationError = new Error("Erro de validação");
+        validationError.status = 400;
+        return validationError;
       }
       return next(error);
     });
@@ -125,7 +134,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .select("-password")
     .then((user) => {
       if (!user) {
-        const error = new Error("User ID not found");
+        const error = new Error("Erro de validação.");
         error.status = 404;
         return next(error);
       }
@@ -134,7 +143,9 @@ module.exports.updateAvatar = (req, res, next) => {
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
-        error.status = 400;
+        const validationError = new Error("Erro de validação");
+        validationError.status = 400;
+        return validationError;
       }
       return next(error);
     });
@@ -147,11 +158,9 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : DEV_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
       res.status(200).send({ data: token });
     })
-    .catch((err) => {
-      return res.status(401).send({ message: err.message });
-    });
+    .catch((err) => res.status(401).send({ message: err.message }));
 };
