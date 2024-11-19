@@ -29,8 +29,6 @@ function Main({
       });
   }, [setInitialCards]);
 
-  
-
   if (!currentUser) {
     return <div>Loading...</div>;
   }

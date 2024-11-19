@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {  useState, useContext } from "react";
 import "../blocks/Pages.css";
 import Main from "../components/Main";
 import api from "../utils/api";
@@ -23,7 +23,7 @@ function MainPage() {
   const {currentUser, setCurrentUser} =useContext(CurrentUserContext)
   const { cards, setInitialCards } = useContext(CardContextRender);
  
-
+ 
   
 
   const handleCardLike = React.useCallback((card) => {

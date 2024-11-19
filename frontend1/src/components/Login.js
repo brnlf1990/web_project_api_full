@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import * as auth from "../utils/auth";
 import InfoTooltip from "../components/InfoTooltip";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import api from "../utils/api";
 function Login({ handleLoggedIn }) {
   const [formData, setFormData] = React.useState({
     email: "",
@@ -13,50 +14,55 @@ function Login({ handleLoggedIn }) {
   const [isRegistred, setIsRegistred] = React.useState(false);
   const location = useLocation();
   const [errorMessage, setErrorMessage] = React.useState("");
-  const {setCurrentUser} = useContext(CurrentUserContext)
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    e.preventDefault();
+
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.email === "" || formData.password === "") {
-      setErrorMessage("Email ou senha invalido, por favor verifique os campos.");
-      return;
-    }
 
     auth
       .autorization(formData)
       .then((data) => {
+        if (data === 401) {
+          setErrorMessage(
+            "Email ou senha invalido, por favor verifique os campos."
+          );
+          return;
+        }
         if (data) {
-          setCurrentUser(data)
-          localStorage.setItem("token", data.data);
+
+          localStorage.setItem("token", data.token);
+          api.setAuthorization(localStorage.getItem("token"));
+
+          setCurrentUser(data.user);
           navigate("/cards");
           handleLoggedIn();
         }
       })
       .catch((err) => {
-        console.log(err);
-        
+        return err;
       });
   };
 
   React.useEffect(() => {
-    if (location.state){
+    if (location.state) {
       setIsModalOpen(true);
       setIsRegistred(true);
-
     }
-    return
-
-  },[location])
+    return;
+  }, [location]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <div className="login">
       <div className="login__container">
@@ -85,8 +91,8 @@ function Login({ handleLoggedIn }) {
         </form>
       </div>
       {isModalOpen && (
-          <InfoTooltip isRegistred={isRegistred} onClose={handleCloseModal} />
-        )}
+        <InfoTooltip isRegistred={isRegistred} onClose={handleCloseModal} />
+      )}
     </div>
   );
 }

@@ -6,6 +6,11 @@ export class Api {
     this._headers = headers;
   }
 
+  setAuthorization(token) {
+    
+    this._headers["Authorization"] = `Bearer ${token}`;
+  }
+
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       method:"GET",
@@ -30,7 +35,10 @@ export class Api {
     }).then((res) => {
       if (res.ok) {
         
-        return res.json().then((data) => data.data
+        return res.json().then((data) =>{
+          
+          return data.data
+          }
         )
       }
 
@@ -130,6 +138,7 @@ export class Api {
 const api = new Api({
   baseUrl: "http://localhost:3001",
   headers: {
+    'Accept': "application/json",
     "Authorization" : `Bearer ${localStorage.getItem('token')}`,
     "Content-Type": "application/json",
   },

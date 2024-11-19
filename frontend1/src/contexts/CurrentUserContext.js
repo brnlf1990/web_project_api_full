@@ -11,13 +11,13 @@ export const CurrentUserProvider = ({children}) => {
     api
     .getUserInfo()
     .then((data) => {
-      
       setCurrentUser(data.user);
     })
     .catch((err) => {
       console.error(err);
     });
   }, [])
+ 
  
  
   

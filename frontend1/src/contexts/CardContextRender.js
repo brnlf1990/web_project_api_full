@@ -13,7 +13,7 @@ export const CardRenderProvider = ({ children }) => {
         if (!data){
           return
         }
-
+          
         setInitialCards(data);
       })
       .catch((err) => {
