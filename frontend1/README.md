@@ -3,9 +3,11 @@
 - [Funcionalidades e Demonstração da Aplicação](#funcionalidades-e-demonstração-da-aplicação)
 - [Acesso ao Projeto](#acesso-ao-projeto)
 - [Tecnologias utilizadas](#tecnologias-utilizadas)
-- [Pessoas Contribuidoras](#pessoas-contribuidoras)
-- [Pessoas Desenvolvedoras do Projeto](#pessoas-desenvolvedoras)
+- [Pessoas Desenvolvedoras do Projeto](#autores)
 - [Conclusão](#conclusão)
+
+# ![Around The U.S.](../frontend1/src/images/header_title.jpg)
+
 
 # Descrição do Projeto
 
@@ -47,6 +49,13 @@ Após realizar o login com sucesso, o usuário será redirecionado para a págin
 - `Adição de cards`: Ao clicar no botão maior com o símbolo de “+”, o usuário poderá criar cartões, inserindo um link para a foto e um nome. Atenção: é possível usar apenas links de imagens disponíveis na internet. Caso a imagem não apareça, verifique se ela não possui proteção contra "hotlinking".
 - `Ampliar imagens, likes e deslikes`: Após postar uma imagem, o usuário pode ampliá-la clicando nela. Para fechar a visualização ampliada, basta clicar no ícone de "X", na área preta ao redor da imagem ou pressionar a tecla ESC.
 
+
+# Técnologias utilizadas
+<img align="center" alt="html5" src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+<img align="center" alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+<img align="center" alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img align="center" alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+<img align="center" alt="React Router" src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white">
 
 # Autores
 
