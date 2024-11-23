@@ -4,6 +4,9 @@ const HTTP_STATUS = require('../utils/utils');
 
 
 module.exports.getCards = (req, res, next) => {
+  const { authorization } = req.headers;
+
+
   Cards.find({})
     .then((card) => {
       if (!card) {

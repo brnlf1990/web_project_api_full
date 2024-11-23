@@ -2,11 +2,10 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const hash = require("../utils/hash");
-const HTTP_STATUS = require('../utils/utils')
+const HTTP_STATUS = require("../utils/utils");
 
 const { NODE_ENV, JWT_SECRET, DEV_SECRET } = process.env;
 const User = require("../models/usersModels");
-
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -105,7 +104,7 @@ module.exports.updateUser = (req, res, next) => {
   User.findByIdAndUpdate(
     userId,
     { name, about, avatar },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .select("-password")
     .then((user) => {
@@ -155,12 +154,22 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials({ email, password })
     .then((user) => {
+
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : DEV_SECRET,
-        { expiresIn: "7d" },
+        { expiresIn: "7d" }
       );
-      res.status(200).send({ data: token });
+      res.status(200).send({
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          about: user.about,
+          avatar:user.avatar
+        },
+        token,
+      });
     })
     .catch((err) => res.status(401).send({ message: err.message }));
 };

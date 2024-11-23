@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
   const token = authorization.replace("Bearer ", "");
   let payload;
   try {
-    payload = jwt.verify(token, JWT_SECRET || DEV_SECRET);
+    payload = jwt.verify(token, JWT_SECRET );
   } catch (err) {
     const error = new Error("Autorização necessária.");
     error.status = 401;
